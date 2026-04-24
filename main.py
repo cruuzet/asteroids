@@ -26,12 +26,20 @@ def main():
     asteroid_field = AsteroidField()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
+    font = pygame.font.Font(None, 32)
+    
+    def update_text():
+        text = font.render(f"XP: {player.xp}", 1, "white")
+        textPos = text.get_rect(centerx=screen.get_width() / 2)
+        screen.blit(text, textPos)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
         screen.fill("#000000")
+        update_text()
 
         for updatables in updatable:
             updatables.update(dt)
@@ -41,7 +49,7 @@ def main():
                 sys.exit()
             for shot in shots:
                 if asteroid.check_collision(shot) == True:
-                    asteroid.split()
+                    asteroid.split(player)
                     shot.kill()
         for drawables in drawable:
             drawables.draw(screen)
